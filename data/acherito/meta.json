@@ -1,0 +1,64 @@
+{
+  "id": "acherito",
+  "name": "Ibón de Acherito (circular)",
+  "zone": "Valle de Hecho (Huesca)",
+  "notes": [],
+  "waypoints": [
+    {
+      "id": "inicio",
+      "idx": 0,
+      "name": "Aparcamiento de La Mina",
+      "type": "start",
+      "confirmed": false,
+      "note": "El track empieza junto a los Dólmenes del Arroyo; el mapa del IGN sitúa el aparcamiento de La Mina a unos 100 m."
+    },
+    {
+      "id": "w1",
+      "idx": 13,
+      "name": "Pie de la cuesta fuerte",
+      "type": "slope",
+      "confirmed": false,
+      "note": ""
+    },
+    {
+      "id": "w2",
+      "idx": 36,
+      "name": "Alto de la cuesta fuerte",
+      "type": "slope",
+      "confirmed": false,
+      "note": ""
+    },
+    {
+      "id": "ibon",
+      "idx": 52,
+      "name": "Ibón de Acherito",
+      "type": "top",
+      "confirmed": false,
+      "note": "El mapa del IGN sitúa aquí la orilla sur del ibón, y quien grabó el track paró unos 30 min. Es también el punto más alto del recorrido."
+    },
+    {
+      "id": "w4",
+      "idx": 74,
+      "name": "Paraje de Acherito",
+      "type": "slope",
+      "confirmed": false,
+      "note": "Separa el tramo casi llano junto a las Peñas de Ibón del tramo con más pendiente hacia el barranco."
+    },
+    {
+      "id": "w5",
+      "idx": 107,
+      "name": "Barranco de Acherito",
+      "type": "slope",
+      "confirmed": false,
+      "note": "El camino sigue el barranco; la pendiente se suaviza."
+    },
+    {
+      "id": "w6",
+      "idx": 138,
+      "name": "Repecho sobre La Mina",
+      "type": "slope",
+      "confirmed": false,
+      "note": "Entre este punto y la salida hay unos 370 m muy empinados (~24 %)."
+    }
+  ]
+}

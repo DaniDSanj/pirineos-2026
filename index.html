@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pirineos 2026</title>
+  <meta name="theme-color" content="#24564a">
+  <meta name="description" content="Guía de rutas del viaje a los Pirineos, utilizable sin cobertura.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Pirineos">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top-title">
+      <select id="routeSelect" aria-label="Elegir ruta" hidden></select>
+      <h1 id="routeName">Cargando ruta…</h1>
+      <p id="routeSub"></p>
+    </div>
+    <button id="offlineChip" class="chip" type="button" aria-live="polite">Comprobando…</button>
+  </header>
+
+  <div id="installHint" class="install-hint" hidden>
+    <p id="installText"></p>
+    <button type="button" class="link-btn" id="installClose">Entendido</button>
+  </div>
+
+  <main>
+    <!-- ============ EN RUTA ============ -->
+    <section id="tab-ruta" class="tab is-active" aria-labelledby="tabbtn-ruta">
+      <div class="map-wrap">
+        <div id="map" aria-label="Mapa de la ruta"></div>
+        <div class="map-tools">
+          <button type="button" id="btnLayer" class="map-btn" aria-label="Cambiar entre mapa topográfico y foto aérea">Foto</button>
+          <button type="button" id="btnFit" class="map-btn" aria-label="Ver la ruta completa">Ruta</button>
+          <button type="button" id="btnLocate" class="map-btn map-btn-strong" aria-label="Centrar el mapa en mi posición">Yo</button>
+        </div>
+      </div>
+
+      <div class="signpost-row">
+        <div id="signpost" class="signpost" role="status"></div>
+      </div>
+
+      <div class="gps-row">
+        <button type="button" id="btnGps" class="btn btn-primary">Activar GPS</button>
+        <label class="switch"><input type="checkbox" id="wakeToggle"><span>Pantalla siempre encendida</span></label>
+      </div>
+      <p id="gpsMsg" class="gps-msg" hidden></p>
+
+      <dl id="live" class="live"></dl>
+
+      <div class="profile-card">
+        <div class="profile-head">
+          <h2>Perfil</h2>
+          <p class="hint">Toca o arrastra para ver cada punto en el mapa</p>
+        </div>
+        <div class="profile-wrap">
+          <svg id="profile" role="img" aria-label="Perfil de elevación"></svg>
+          <div id="profileTip" class="profile-tip" hidden></div>
+        </div>
+        <ul class="legend" id="legend"></ul>
+      </div>
+    </section>
+
+    <!-- ============ FICHA ============ -->
+    <section id="tab-ficha" class="tab" aria-labelledby="tabbtn-ficha" hidden>
+      <div class="sheet">
+        <h2>Ficha de la ruta</h2>
+        <dl id="facts" class="facts"></dl>
+
+        <h3>Vuestro ritmo</h3>
+        <div id="paceGroup" class="segmented" role="radiogroup" aria-label="Ritmo del grupo"></div>
+        <p id="paceNote" class="note"></p>
+
+        <h3>Sentido de la marcha</h3>
+        <div class="direction">
+          <p id="directionText"></p>
+          <button type="button" id="btnReverse" class="btn">Invertir sentido</button>
+        </div>
+
+        <h3>Libro de ruta</h3>
+        <p class="note">Toca un tramo para verlo en el mapa.</p>
+        <ol id="legs" class="legs"></ol>
+        <p id="wpNotice" class="notice"></p>
+
+        <h3>Origen y descargas</h3>
+        <ul id="sources" class="sources"></ul>
+
+        <h3>Fiabilidad de los datos</h3>
+        <p id="dataQuality" class="note"></p>
+      </div>
+    </section>
+
+    <!-- ============ SEGURIDAD ============ -->
+    <section id="tab-seguridad" class="tab" aria-labelledby="tabbtn-seguridad" hidden>
+      <div class="sheet">
+        <h2>Luz del día</h2>
+        <dl id="sun" class="facts"></dl>
+        <p id="sunAdvice" class="advice"></p>
+
+        <h2>Emergencias</h2>
+        <div class="sos">
+          <p class="sos-label">Tu posición</p>
+          <p id="sosCoords" class="sos-coords">Activa el GPS para verla</p>
+          <p id="sosMeta" class="note"></p>
+          <div class="sos-actions">
+            <button type="button" id="btnCopy" class="btn" disabled>Copiar coordenadas</button>
+            <a class="btn btn-danger" href="tel:112">Llamar al 112</a>
+          </div>
+          <p id="copyMsg" class="note" hidden></p>
+        </div>
+        <ul class="tips">
+          <li>Si tu compañía no tiene cobertura, el 112 intenta conectar a través de cualquier otra red disponible.</li>
+          <li>Al llamar, di qué ruta hacéis, el punto de referencia más cercano, las coordenadas y cuántas personas sois.</li>
+          <li>Con poca batería, apaga el GPS de esta app y la pantalla: guarda energía para la llamada.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" id="tabbtn-ruta" data-tab="ruta" aria-selected="true">En ruta</button>
+    <button type="button" role="tab" id="tabbtn-ficha" data-tab="ficha" aria-selected="false">Ficha</button>
+    <button type="button" role="tab" id="tabbtn-seguridad" data-tab="seguridad" aria-selected="false">Seguridad</button>
+  </nav>
+
+  <div id="updateBanner" class="update-banner" hidden>
+    <span>Hay una versión nueva de la guía.</span>
+    <button type="button" id="btnUpdate" class="btn btn-primary">Actualizar</button>
+  </div>
+
+  <footer class="foot">
+    <p>Mapas y ortofotos © <a href="https://www.ign.es">Instituto Geográfico Nacional</a> (CC BY 4.0). <span id="appVersion"></span></p>
+  </footer>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
