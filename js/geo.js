@@ -188,6 +188,19 @@ export function projectOnRoute(route, lat, lon, hint = null) {
       last.lastAlong = c.along;
     } else passes.push({ best: c, lastAlong: c.along });
   }
+  if (hint != null) {
+    // Continuidad: si cerca de la posición anterior (±150 m de recorrido) hay una solución
+    // casi tan buena, se toma esa. Evita saltar a la otra rama en rutas de ida y vuelta por
+    // el mismo camino, sobre todo junto al punto de giro, donde ambas ramas forman una sola
+    // "pasada". Retroceder se penaliza un poco (0,2 m por metro): al caminar lo normal es
+    // avanzar, y en el punto de giro decide que se ha empezado a bajar y no que se sube
+    // marcha atrás. Avanzar no se penaliza, para no ir con retraso.
+    const local = near.filter((c) => Math.abs(c.along - hint) <= 150);
+    if (local.length) {
+      const cost = (c) => c.dist + 0.2 * Math.max(0, hint - c.along);
+      return local.reduce((m, c) => (cost(c) < cost(m) ? c : m));
+    }
+  }
   if (passes.length === 1) return passes[0].best;
   // Varias pasadas por la misma zona: sin pista, la primera; con pista, la más próxima a ella
   if (hint == null) return passes[0].best;

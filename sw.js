@@ -2,13 +2,15 @@
 // La lista de ficheros y la versión las escribe tools/build.py: no editar a mano
 // entre las marcas BUILD.
 // BUILD:START
-const VERSION = '2026.11.05-1535';
+const VERSION = '2026.11.08-0929';
 const SHELL = [
   "./",
   "index.html",
   "manifest.webmanifest",
   "css/app.css",
   "data/routes.json",
+  "data/acher/route.json",
+  "data/acher/track.gpx",
   "data/acherito/route.json",
   "data/acherito/track.gpx",
   "fonts/atkinson-hyperlegible-latin-400-normal.woff2",

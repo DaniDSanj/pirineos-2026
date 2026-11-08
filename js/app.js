@@ -68,10 +68,12 @@ async function init() {
     if (S.routes.length > 1) {
       sel.hidden = false;
       sel.innerHTML = S.routes.map((r) => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('');
-      sel.addEventListener('change', () => loadRoute(sel.value));
+      sel.addEventListener('change', () => { history.replaceState(null, '', `#${sel.value}`); loadRoute(sel.value); });
     }
     const fromHash = location.hash.slice(1);
-    await loadRoute(S.routes.some((r) => r.id === fromHash) ? fromHash : S.routes[0].id);
+    const firstId = S.routes.some((r) => r.id === fromHash) ? fromHash : S.routes[0].id;
+    sel.value = firstId;
+    await loadRoute(firstId);
   } catch (e) {
     $('routeName').textContent = 'No se pudo cargar la ruta';
     $('routeSub').textContent = 'Abre la guía una vez con cobertura para guardarla en el móvil.';
@@ -466,7 +468,7 @@ function renderFicha() {
 
   const ref = S.raw.reference;
   const spacing = Math.round(ref.distance_m / (ref.points - 1));
-  $('dataQuality').textContent = `Calculado a partir de ${ref.points} puntos del track (uno cada ${spacing} m de media). Con tan pocos puntos, la distancia real suele ser algo mayor y otras apps pueden dar cifras distintas. Las altitudes vienen del GPS de quien lo grabó y pueden desviarse 10–30 m. Por eso el aviso de "fuera del track" salta a partir de 60 m.`;
+  $('dataQuality').textContent = `Calculado a partir de ${ref.points} puntos del track (uno cada ${spacing} m de media). ${spacing > 20 ? 'Con tan pocos puntos, la distancia real suele ser algo mayor y otras apps pueden dar cifras distintas.' : 'Es un track denso, así que la distancia es fiable, aunque otras apps pueden dar cifras algo distintas.'} Las altitudes vienen del GPS de quien lo grabó y pueden desviarse 10–30 m. Por eso el aviso de "fuera del track" salta a partir de 60 m.`;
 }
 
 $('btnReverse').addEventListener('click', () => { S.reversed = !S.reversed; saveSettings(); S.cursor = null; rebuild(); });

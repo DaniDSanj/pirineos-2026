@@ -3,10 +3,13 @@
 import { readFileSync } from 'node:fs';
 import * as g from '../js/geo.js';
 
-const raw = JSON.parse(readFileSync(new URL('../data/acherito/route.json', import.meta.url)));
+const { routes } = JSON.parse(readFileSync(new URL('../data/routes.json', import.meta.url)));
 let fails = 0;
 const check = (name, ok, info) => { console.log(`${ok ? 'OK  ' : 'FALLO'} ${name}: ${info}`); if (!ok) fails++; };
 
+for (const { id } of routes) {
+const raw = JSON.parse(readFileSync(new URL(`../data/${id}/route.json`, import.meta.url)));
+console.log(`\n== ${raw.name} ==`);
 for (const reversed of [false, true]) {
   const r = g.buildRoute(raw, reversed);
   const tag = reversed ? '[invertida]' : '[normal]';
@@ -26,14 +29,20 @@ for (const reversed of [false, true]) {
   // Proyección: posición a 20 m al este de cada punto. En las curvas puede caer en el
   // segmento vecino (es geométricamente correcto), así que se admite hasta ~1,3 puntos
   // de separación (100 m); lo que no se admite es un salto a otra parte de la ruta.
-  let maxErr = 0, hint = null;
+  // Excepción acotada: en el punto de giro de un tramo de ida y vuelta las dos ramas son
+  // la misma línea y el desvío simulado puede caer sobre la otra. Se admite si el punto
+  // elegido está en el mismo sitio (< 40 m) y el error es < 300 m; se cuentan aparte.
+  let maxErr = 0, overlap = 0, hint = null;
   for (let i = 0; i < r.pts.length; i += 3) {
     const [lat, lon] = r.pts[i];
     const p = g.projectOnRoute(r, lat, lon + 20 / (111320 * Math.cos(lat * Math.PI / 180)), hint);
-    maxErr = Math.max(maxErr, Math.abs(p.along - r.cum[i]));
+    const err = Math.abs(p.along - r.cum[i]);
+    if (err >= 100 && err < 300 && g.haversine(g.pointAt(r, p.along), r.pts[i]) < 40) overlap++;
+    else maxErr = Math.max(maxErr, err);
     hint = p.along;
   }
-  check(`${tag} seguimiento GPS simulado`, maxErr < 100, `error máx. ${maxErr.toFixed(0)} m sobre el track`);
+  check(`${tag} seguimiento GPS simulado`, maxErr < 100, `error máx. ${maxErr.toFixed(0)} m sobre el track`
+    + (overlap ? ` (más ${overlap} puntos en la otra rama de un tramo de ida y vuelta)` : ''));
   // Puntos intermedios exactos sobre el track: error ~0
   let e2 = 0; hint = null;
   for (let a = 0; a < r.total; a += 137) {
@@ -51,8 +60,10 @@ const r = g.buildRoute(raw);
 const din = g.hoursBetween(r, 0, r.total, 1);
 console.log(`ritmo de la grabación ≈ ×${(raw.recorded.moving_s / 3600 / din).toFixed(2)} (en movimiento ${(raw.recorded.moving_s / 3600).toFixed(2)} h)`);
 
+}
+
 // Sol en la zona: 5/11/2026 y 15/9
-const [lat, lon] = raw.points[0];
+const [lat, lon] = JSON.parse(readFileSync(new URL(`../data/${routes[0].id}/route.json`, import.meta.url))).points[0];
 for (const d of [new Date('2026-11-05T12:00:00Z'), new Date('2026-09-15T12:00:00Z')]) {
   const s = g.sunTimes(d, lat, lon);
   const f = (x) => x.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit' });
