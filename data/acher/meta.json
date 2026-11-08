@@ -1,0 +1,96 @@
+{
+  "id": "acher",
+  "name": "Aproximación al refugio d’Acher",
+  "zone": "Selva de Oza, Valle de Hecho (Huesca)",
+  "notes": [],
+  "waypoints": [
+    {
+      "id": "inicio",
+      "idx": 0,
+      "name": "Refugio Selva de Oza",
+      "type": "start",
+      "confirmed": false,
+      "note": "El track empieza junto al refugio Selva de Oza, según el mapa del IGN."
+    },
+    {
+      "id": "info",
+      "idx": 69,
+      "name": "Punto de información",
+      "type": "slope",
+      "confirmed": true,
+      "note": ""
+    },
+    {
+      "id": "puente1",
+      "idx": 125,
+      "name": "Puente",
+      "type": "slope",
+      "confirmed": true,
+      "note": "Cruza el barranco de la Ñetera, según el mapa del IGN."
+    },
+    {
+      "id": "corona",
+      "idx": 141,
+      "name": "Corona de los muertos",
+      "type": "slope",
+      "confirmed": true,
+      "note": ""
+    },
+    {
+      "id": "puente2",
+      "idx": 191,
+      "name": "Segundo puente",
+      "type": "slope",
+      "confirmed": true,
+      "note": "Después se sigue la pista Espata hacia el este."
+    },
+    {
+      "id": "netera",
+      "idx": 327,
+      "name": "Barranco de la Ñetera",
+      "type": "slope",
+      "confirmed": false,
+      "note": "Varias fotos en este punto. Desde aquí se baja hacia el sur, casi en llano, hasta la pista Espata."
+    },
+    {
+      "id": "espata",
+      "idx": 492,
+      "name": "Pista Espata: empieza la subida",
+      "type": "slope",
+      "confirmed": false,
+      "note": "Se acaba el tramo llano y empieza la subida por el barranco Espata (~15–19 % durante 750 m). A la vuelta se pasa de nuevo por aquí."
+    },
+    {
+      "id": "cascada",
+      "idx": 658,
+      "name": "Cascada",
+      "type": "slope",
+      "confirmed": true,
+      "note": ""
+    },
+    {
+      "id": "confluencia",
+      "idx": 801,
+      "name": "Cruce de barrancos",
+      "type": "slope",
+      "confirmed": false,
+      "note": "Último rellano. A partir de aquí, unos 560 m en zigzag muy empinados (~24 %)."
+    },
+    {
+      "id": "mirador",
+      "idx": 902,
+      "name": "Mirador del Castillo de Acher",
+      "type": "top",
+      "confirmed": true,
+      "note": "Final de la subida: panorámica del Castillo de Acher y punto más alto del recorrido. Quien grabó el track paró aquí unos 17 min. Hasta el refugio d’Acher quedarían unos 300 m más de desnivel."
+    },
+    {
+      "id": "desvio",
+      "idx": 1302,
+      "name": "Desvío a la Selva de Oza",
+      "type": "slope",
+      "confirmed": false,
+      "note": "La vuelta deja aquí el camino de subida y baja por la pista Espata directamente al refugio Selva de Oza: unos 740 m de bajada, con tramos de más del 20 %."
+    }
+  ]
+}

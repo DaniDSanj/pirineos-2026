@@ -1,5 +1,6 @@
 {
   "routes": [
-    {"id": "acherito", "name": "Ibón de Acherito (circular)"}
+    {"id": "acherito", "name": "Ibón de Acherito (circular)"},
+    {"id": "acher", "name": "Aproximación al refugio d'Acher"}
   ]
 }
